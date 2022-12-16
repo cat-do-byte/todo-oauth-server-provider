@@ -1,8 +1,16 @@
 import { NextFunction, Request, Response } from "express"
 
-export const errorResponder = (err: any, req: Request, res: Response) => {
+export const errorResponder = (
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   res.header("Content-Type", "application/json")
-  res.status(err.statusCode).send(JSON.stringify(err, null, 4))
+  // console.log(err)
+  res.status(400).json({
+    error: err.message,
+  })
 }
 export const invalidPathHandler = (
   req: Request,

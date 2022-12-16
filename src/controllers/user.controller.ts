@@ -37,7 +37,7 @@ export default {
 
     try {
       const user = await User.query().findOne(loginData)
-      if (!user) throw new Error("User not exist")
+      if (!user) throw new Error("User with login data is not correct")
 
       const { id, email } = user
 
