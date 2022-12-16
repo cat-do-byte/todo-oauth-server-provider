@@ -4,13 +4,13 @@ import User from "./user.model"
 export default class Todo extends Model {
   id!: number
   content!: string
-  user!: User
+  user_id!: number
 
   static tableName = "todos"
 
   static jsonSchema = {
     type: "object",
-    required: ["content", "user"],
+    required: ["content", "user_id"],
 
     properties: {
       id: { type: "integer" },
@@ -22,7 +22,6 @@ export default class Todo extends Model {
   static relationMappings = () => ({
     user: {
       relation: Model.BelongsToOneRelation,
-      // The related model.
       modelClass: User,
 
       join: {
