@@ -37,7 +37,20 @@ async function initTables(knex: any) {
     await knex.schema.createTable("todos", (table: CreateTableBuilder) => {
       table.increments("id").primary()
       table.string("content")
-      table.integer("user_id").references("user.id")
+      table.integer("userId").references("users.id")
+    })
+  }
+
+  if (!(await knex.schema.hasTable("clients"))) {
+    console.log("create table clients")
+    await knex.schema.createTable("clients", (table: CreateTableBuilder) => {
+      table.increments("id").primary()
+      table.string("name")
+      table.integer("userId").references("users.id")
+      table.string("clientId")
+      table.string("clientSecret")
+      table.specificType("redirectUris", "string ARRAY")
+      table.specificType("grants", "string ARRAY")
     })
   }
 }

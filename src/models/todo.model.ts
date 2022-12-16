@@ -4,18 +4,18 @@ import User from "./user.model"
 export default class Todo extends Model {
   id!: number
   content!: string
-  user_id!: number
+  userId!: number
 
   static tableName = "todos"
 
   static jsonSchema = {
     type: "object",
-    required: ["content", "user_id"],
+    required: ["content", "userId"],
 
     properties: {
       id: { type: "integer" },
       content: { type: "string", minLength: 1 },
-      user_id: { type: ["integer", "null"] },
+      userId: { type: ["integer", "null"] },
     },
   }
 
@@ -25,7 +25,7 @@ export default class Todo extends Model {
       modelClass: User,
 
       join: {
-        from: "todos.user_id",
+        from: "todos.userId",
         to: "users.id",
       },
     },

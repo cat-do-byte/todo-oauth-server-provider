@@ -21,7 +21,7 @@ export default {
 
       const newTodo = await Todo.query().insert({
         content,
-        user_id: currentUser.id,
+        userId: currentUser.id,
       })
 
       res.json(newTodo)
@@ -35,7 +35,7 @@ export default {
     const { id } = req.params
     try {
       const todo = await Todo.query().findById(id)
-      if (todo.user_id !== currentUser.id)
+      if (todo.userId !== currentUser.id)
         throw new Error("You can not delete this todo")
 
       const deletedTodo = await todo.$query().delete()
