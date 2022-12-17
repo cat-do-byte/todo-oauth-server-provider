@@ -1,6 +1,7 @@
 import * as OAuth2Server from "oauth2-server"
 import AuthorizationCode from "../../models/authorization-code.model"
 import ClientModel from "../../models/client.model"
+import OauthToken from "../../models/oauth-token.model"
 
 const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
   getAuthorizationCode: async (code: string): Promise<any> => {
@@ -43,14 +44,47 @@ const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
     return ClientModel.query().findOne(params)
   },
 
-  saveToken: (token, client, user) => {
-    console.log("saaaaaaaaev")
-    return Promise.resolve(false)
+  saveToken: async (token, client, user): Promise<any> => {
+    let tokenData = {
+      userId: Number(user.id),
+      clientId: Number(client.id),
+      accessToken: token.accessToken,
+      accessTokenExpiresAt: token.accessTokenExpiresAt
+        ? token.accessTokenExpiresAt.toISOString()
+        : undefined,
+      refreshToken: token.refreshToken,
+      refreshTokenExpiresAt: token.refreshTokenExpiresAt
+        ? token.refreshTokenExpiresAt.toISOString()
+        : undefined,
+      scope: token.scope,
+    }
+    const newToken = await OauthToken.query().insert(tokenData)
+
+    /* const newToken = OauthToken.query()
+      .insertGraphAndFetch([tokenData], {
+        relate: true,
+      })
+      .returning("*")
+      .first() */
+
+    return await OauthToken.query()
+      .findById(newToken.id)
+      .withGraphFetched("user")
+      .withGraphFetched("client")
+
+    // return newToken
   },
 
-  getAccessToken: () => {
-    console.log("get token...")
-    return Promise.resolve(false)
+  getAccessToken: async (accessToken: string): Promise<any> => {
+    const oauthToken = await OauthToken.query()
+      .findOne({
+        accessToken,
+      })
+      .withGraphFetched("user")
+      .withGraphFetched("client")
+
+    console.log(oauthToken)
+    return oauthToken
   },
 
   verifyScope: () => {

@@ -68,4 +68,21 @@ async function initTables(knex: any) {
       }
     )
   }
+
+  if (!(await knex.schema.hasTable("oauth_tokens"))) {
+    console.log("create table oauth_tokens")
+    await knex.schema.createTable(
+      "oauth_tokens",
+      (table: CreateTableBuilder) => {
+        table.increments("id").primary()
+        table.integer("userId").references("users.id")
+        table.integer("clientId").references("clients.id")
+        table.string("accessToken")
+        table.string("refreshToken")
+        table.timestamp("accessTokenExpiresAt")
+        table.timestamp("refreshTokenExpiresAt")
+        table.string("scope")
+      }
+    )
+  }
 }
