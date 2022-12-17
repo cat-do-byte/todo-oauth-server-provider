@@ -46,7 +46,7 @@ async function initTables(knex: any) {
     await knex.schema.createTable("clients", (table: CreateTableBuilder) => {
       table.increments("id").primary()
       table.string("name")
-      table.integer("user").references("users.id")
+      table.integer("userId").references("users.id")
       table.string("clientId")
       table.string("clientSecret")
       table.specificType("redirectUris", "string ARRAY")
@@ -60,8 +60,8 @@ async function initTables(knex: any) {
       "authorization_codes",
       (table: CreateTableBuilder) => {
         table.increments("id").primary()
-        table.integer("user").references("users.id")
-        table.integer("client").references("clients.id")
+        table.integer("userId").references("users.id")
+        table.integer("clientId").references("clients.id")
         table.string("authorizationCode")
         table.timestamp("expiresAt")
         table.string("scope")

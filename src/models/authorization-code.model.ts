@@ -4,44 +4,50 @@ import User from "./user.model"
 
 export default class AuthorizationCode extends Model {
   id!: number
-  user!: number
-  client!: number
+  userId!: number
+  clientId!: number
   authorizationCode!: string
-  expiresAt?: Date
+  expiresAt?: string
   scope?: string | string[]
 
   static tableName = "authorization_codes"
 
   static jsonSchema = {
     type: "object",
-    required: ["user", "client", "authorizationCode"],
+    required: ["userId", "clientId", "authorizationCode"],
 
     properties: {
       id: { type: "integer" },
-      user: { type: "integer" },
-      client: { type: "integer" },
+      userId: { type: "integer" },
+      clientId: { type: "integer" },
       authorizationCode: { type: "string" },
       expiresAt: { type: "date-time" },
       scope: { type: "string" },
     },
   }
 
+  $parseDatabaseJson(json: any) {
+    json = super.$formatJson(json)
+    json.expiresAt = new Date(json.expiresAt)
+    return json
+  }
+
   static relationMappings = () => ({
-    user_obj: {
+    user: {
       relation: Model.BelongsToOneRelation,
       modelClass: User,
 
       join: {
-        from: "authorization_codes.user",
+        from: "authorization_codes.userId",
         to: "users.id",
       },
     },
-    client_obj: {
+    client: {
       relation: Model.BelongsToOneRelation,
       modelClass: Client,
 
       join: {
-        from: "authorization_codes.client",
+        from: "authorization_codes.clientId",
         to: "clients.id",
       },
     },
