@@ -4,18 +4,21 @@ import ClientModel from "../../models/client.model"
 
 const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
   getAuthorizationCode: async (code: string): Promise<any> => {
-    const authCode = await AuthorizationCode.query().findOne({
-      authorizationCode: code,
-    })
+    const authCode = await AuthorizationCode.query()
+      .findOne({
+        authorizationCode: code,
+      })
+      .withGraphFetched("user")
+      .withGraphFetched("client")
     return authCode
   },
 
   saveAuthorizationCode: async (code, client, user): Promise<any> => {
     let authorizationCodeData = {
-      user: Number(user.id),
-      client: Number(client.id),
+      userId: Number(user.id),
+      clientId: Number(client.id),
       authorizationCode: code.authorizationCode,
-      expiresAt: code.expiresAt,
+      expiresAt: code.expiresAt.toISOString(),
       scope: code.scope,
     }
     const newAuthCode = AuthorizationCode.query().insert(authorizationCodeData)
@@ -23,8 +26,11 @@ const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
     return newAuthCode
   },
 
-  revokeAuthorizationCode: () => {
-    return Promise.resolve(false)
+  revokeAuthorizationCode: async (code) => {
+    let result = await AuthorizationCode.query()
+      .delete()
+      .where({ authorizationCode: code.authorizationCode })
+    return true
   },
 
   getClient: async (clientId: string, clientSecret: string): Promise<any> => {
@@ -37,7 +43,8 @@ const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
     return ClientModel.query().findOne(params)
   },
 
-  saveToken: () => {
+  saveToken: (token, client, user) => {
+    console.log("saaaaaaaaev")
     return Promise.resolve(false)
   },
 
