@@ -7,10 +7,10 @@ export default {
   showClient: async (req: Request, res: Response) => {
     const currentUser = req.user
 
-    const todos = await Client.query()
+    const client = await Client.query()
       .withGraphJoined("user")
       .where("user.id", currentUser.id)
-    res.json(todos)
+    res.json(client)
   },
 
   createClient: async (req: Request, res: Response, next: NextFunction) => {
@@ -38,6 +38,20 @@ export default {
       })
 
       res.json(newTodo)
+    } catch (err) {
+      next(err)
+    }
+  },
+
+  getClient: async (req: Request, res: Response, next: NextFunction) => {
+    const { clientId } = req.body
+    try {
+      const client = await Client.query()
+        .findOne({ clientId })
+        .select("name", "redirectUris")
+      if (!client)
+        throw new Error("Can not found client with clientID " + clientId)
+      res.json(client)
     } catch (err) {
       next(err)
     }

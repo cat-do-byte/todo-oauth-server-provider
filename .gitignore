@@ -1,4 +1,5 @@
 # Logs
+src/config/todo.db
 logs
 *.log
 npm-debug.log*

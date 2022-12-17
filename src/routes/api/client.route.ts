@@ -8,4 +8,6 @@ clientRouter.post("/", clientController.createClient)
 
 clientRouter.get("/", clientController.showClient)
 
+clientRouter.post("/get-client", clientController.getClient)
+
 export default clientRouter
