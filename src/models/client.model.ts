@@ -4,7 +4,7 @@ import User from "./user.model"
 export default class Client extends Model {
   id!: number
   name!: string
-  userId!: number
+  user!: number
   clientId!: string
   clientSecret!: string
   redirectUris?: string[]
@@ -14,12 +14,12 @@ export default class Client extends Model {
 
   static jsonSchema = {
     type: "object",
-    required: ["name", "userId", "clientId", "clientSecret"],
+    required: ["name", "user", "clientId", "clientSecret"],
 
     properties: {
       id: { type: "integer" },
       name: { type: "string", minLength: 1 },
-      userId: { type: "integer" },
+      user: { type: "integer" },
       clientId: { type: "string" },
       clientSecret: { type: "string" },
       redirectUris: { type: "array", default: [], items: { type: "string" } },
@@ -33,7 +33,7 @@ export default class Client extends Model {
       modelClass: User,
 
       join: {
-        from: "clients.userId",
+        from: "clients.user",
         to: "users.id",
       },
     },

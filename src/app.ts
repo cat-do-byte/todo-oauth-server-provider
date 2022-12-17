@@ -9,7 +9,7 @@ import apiRouter from "./routes/api.route"
 const app: Application = express()
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 connectDatabase()
