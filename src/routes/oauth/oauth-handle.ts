@@ -83,12 +83,18 @@ const oauthHandle: OAuth2Server.AuthorizationCodeModel = {
       .withGraphFetched("user")
       .withGraphFetched("client")
 
-    console.log(oauthToken)
     return oauthToken
   },
 
-  verifyScope: () => {
-    return Promise.resolve(false)
+  verifyScope: async (token, scope: string): Promise<boolean> => {
+    console.log(token.scope, scope)
+
+    if (!token.scope) return false
+    const userScope = Array.isArray(token.scope)
+      ? token.scope
+      : token.scope.split(",")
+    if (userScope.includes(scope)) return true
+    return false
   },
 }
 

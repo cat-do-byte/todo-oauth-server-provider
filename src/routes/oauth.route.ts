@@ -4,7 +4,7 @@ import { auth } from "../middlewares/auth.middeware"
 import { tokenFromBody } from "../middlewares/token-from-body.middleware"
 import oauthHandle from "./oauth/oauth-handle"
 
-const outhServer = new OAuthServer({
+export const outhServer = new OAuthServer({
   model: oauthHandle,
   //   debug: true,
   // continueMiddleware: true,

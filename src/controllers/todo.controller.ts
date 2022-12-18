@@ -3,13 +3,17 @@ import Todo from "../models/todo.model"
 import User from "../models/user.model"
 
 export default {
-  showTodo: async (req: Request, res: Response) => {
+  showTodo: async (req: Request, res: Response, next: NextFunction) => {
     const currentUser = req.user
-
-    const todos = await Todo.query()
-      .withGraphJoined("user")
-      .where("user.id", currentUser.id)
-    res.json(todos)
+    try {
+      if (!currentUser) throw new Error(" Can not found current user")
+      const todos = await Todo.query()
+        .withGraphJoined("user")
+        .where("user.id", currentUser.id)
+      res.json(todos)
+    } catch (err) {
+      next(err)
+    }
   },
 
   createTodo: async (req: Request, res: Response, next: NextFunction) => {

@@ -28,7 +28,6 @@ export default {
         ...clientData,
         clientId,
         clientSecret,
-        redirectUris: ["http://localhost:4000/client-callback"],
         grants: ["authorization_code"],
       }
 
