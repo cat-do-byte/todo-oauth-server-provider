@@ -40,6 +40,8 @@ Run 3 Repository :
 
 Manage Todo for user and Client Key for Third party App at http://localhost:4001.
 
+![alt text](photos/dashboard-todo.jpg)
+
 After create a Client App, put ClientID in app.ts of repo todo-oauth-app.
 
 Give authorization permission for app at http://localhost:4002 to manage todo
